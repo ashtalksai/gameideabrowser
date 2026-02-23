@@ -15,7 +15,7 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
     
-    await signIn("resend", { 
+    await signIn("credentials", { 
       email,
       callbackUrl: "/ideas",
     })
@@ -32,7 +32,7 @@ export default function LoginPage() {
           </div>
           <CardTitle>Sign in to GameIdeaBrowser</CardTitle>
           <CardDescription>
-            Enter your email to receive a magic link
+            Enter your email to continue
           </CardDescription>
         </CardHeader>
         
@@ -47,12 +47,12 @@ export default function LoginPage() {
               disabled={isLoading}
             />
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Sending..." : "Send magic link"}
+              {isLoading ? "Signing in..." : "Continue"}
             </Button>
           </form>
           
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            No password needed. We'll send you a secure link.
+            Enter any email to access the site.
           </p>
         </CardContent>
       </Card>

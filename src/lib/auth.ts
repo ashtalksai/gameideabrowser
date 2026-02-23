@@ -1,18 +1,38 @@
 import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import Resend from "@auth/core/providers/resend"
+import Credentials from "@auth/core/providers/credentials"
 import { prisma } from "./db"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  session: { strategy: "jwt" },
   providers: [
-    Resend({
-      from: "GameIdeaBrowser <noreply@gameideabrowser.com>",
+    Credentials({
+      name: "Email",
+      credentials: {
+        email: { label: "Email", type: "email" },
+      },
+      async authorize(credentials) {
+        const email = credentials?.email as string
+        if (!email) return null
+        
+        // Find or create user
+        let user = await prisma.user.findUnique({ where: { email } })
+        if (!user) {
+          user = await prisma.user.create({
+            data: { 
+              id: crypto.randomUUID(),
+              email,
+              plan: 'free',
+            }
+          })
+        }
+        return { id: user.id, email: user.email, name: user.name }
+      },
     }),
   ],
   pages: {
     signIn: '/login',
-    verifyRequest: '/verify-request',
   },
   callbacks: {
     async session({ session, user }) {
