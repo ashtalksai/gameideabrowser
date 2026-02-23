@@ -5,18 +5,22 @@ import { prisma } from "@/lib/db"
 import { IdeaCard } from "@/components/idea-card"
 
 async function getIdeas() {
-  return prisma.idea.findMany({
-    where: {
-      isDraft: false,
-      publishedAt: {
-        lte: new Date(),
+  try {
+    return await prisma.idea.findMany({
+      where: {
+        isDraft: false,
+        publishedAt: {
+          lte: new Date(),
+        },
       },
-    },
-    orderBy: [
-      { featuredDate: 'desc' },
-      { publishedAt: 'desc' },
-    ],
-  })
+      orderBy: [
+        { featuredDate: 'desc' },
+        { publishedAt: 'desc' },
+      ],
+    })
+  } catch {
+    return []
+  }
 }
 
 export default async function IdeasPage() {
