@@ -71,17 +71,22 @@ export default async function IdeaDetailPage({ params }: Props) {
     </>
   )
   
-  // Pro content - paywalled
+  // Pro content - paywalled (always show structure, blur handles the gate)
   const proContent = (
-    <div className="space-y-8">
-      {idea.problem && (
-        <section>
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-            The Problem
-          </h2>
-          <p className="mt-2">{idea.problem}</p>
-        </section>
-      )}
+    <div className="space-y-6">
+      <section>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          The Problem
+        </h2>
+        <p className="mt-2">{idea.problem || "Market gap analysis and problem statement..."}</p>
+      </section>
+      
+      <section>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          Market Size
+        </h2>
+        <p className="mt-2">{idea.marketSize || "$X.XB total addressable market..."}</p>
+      </section>
       
       {idea.marketSize && (
         <section>

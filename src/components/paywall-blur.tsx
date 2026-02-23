@@ -12,8 +12,8 @@ interface PaywallBlurProps {
 
 export function PaywallBlur({ children, className }: PaywallBlurProps) {
   return (
-    <div className={cn("relative", className)}>
-      <div className="pointer-events-none select-none blur-md saturate-50">
+    <div className={cn("relative min-h-[280px] rounded-lg border bg-muted/30", className)}>
+      <div className="pointer-events-none select-none blur-md saturate-50 p-6">
         {children}
       </div>
       
