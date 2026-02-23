@@ -5,23 +5,29 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { IdeaCard } from "@/components/idea-card"
 import { prisma } from "@/lib/db"
 
+export const dynamic = 'force-dynamic'
+
 async function getFeaturedIdea() {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  
-  const idea = await prisma.idea.findFirst({
-    where: {
-      isDraft: false,
-      featuredDate: {
-        lte: today,
+  try {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    
+    const idea = await prisma.idea.findFirst({
+      where: {
+        isDraft: false,
+        featuredDate: {
+          lte: today,
+        },
       },
-    },
-    orderBy: {
-      featuredDate: 'desc',
-    },
-  })
-  
-  return idea
+      orderBy: {
+        featuredDate: 'desc',
+      },
+    })
+    
+    return idea
+  } catch {
+    return null
+  }
 }
 
 export default async function HomePage() {
