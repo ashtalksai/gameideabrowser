@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import Resend from "next-auth/providers/resend"
+import Resend from "@auth/core/providers/resend"
 import { prisma } from "./db"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
