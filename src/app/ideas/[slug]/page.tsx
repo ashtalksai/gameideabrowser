@@ -61,7 +61,13 @@ export default async function IdeaDetailPage({ params }: Props) {
         "{idea.hook}"
       </p>
       
-      <ScoreBreakdown scores={idea} />
+      <ScoreBreakdown scores={{
+        scoreMarket: idea.scoreMarket,
+        scoreDifficulty: idea.scoreDifficulty,
+        scoreCompetition: idea.scoreCompetition,
+        scoreMonetization: idea.scoreMonetization,
+        scoreTiming: idea.scoreTiming,
+      }} />
     </>
   )
   
