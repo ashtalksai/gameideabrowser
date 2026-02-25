@@ -1,28 +1,22 @@
 "use client"
 
-import { useState } from "react"
-import { signIn } from "next-auth/react"
+import { useFormStatus } from "react-dom"
 import { Gamepad2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { loginAction } from "./actions"
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return (
+    <Button type="submit" className="w-full" disabled={pending}>
+      {pending ? "Signing in..." : "Continue"}
+    </Button>
+  )
+}
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setIsLoading(true)
-    
-    await signIn("credentials", { 
-      email,
-      callbackUrl: "/ideas",
-    })
-    
-    setIsLoading(false)
-  }
-  
   return (
     <div className="flex min-h-[60vh] items-center justify-center py-12">
       <Card className="w-full max-w-md">
@@ -37,18 +31,14 @@ export default function LoginPage() {
         </CardHeader>
         
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form action={loginAction} className="space-y-4">
             <Input
               type="email"
+              name="email"
               placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               required
-              disabled={isLoading}
             />
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing in..." : "Continue"}
-            </Button>
+            <SubmitButton />
           </form>
           
           <p className="mt-4 text-center text-sm text-muted-foreground">

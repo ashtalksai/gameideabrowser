@@ -6,6 +6,7 @@ import { prisma } from "./db"
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  trustHost: true,
   providers: [
     Credentials({
       name: "Email",
@@ -35,13 +36,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/login',
   },
   callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
+    async jwt({ token, user }) {
+      // On initial sign in, add user id to token
+      if (user) {
+        token.id = user.id
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user && token.id) {
+        const userId = token.id as string
         const dbUser = await prisma.user.findUnique({
-          where: { id: user.id },
+          where: { id: userId },
           select: { plan: true, isAdmin: true }
         })
-        session.user.id = user.id
+        session.user.id = userId
         session.user.plan = dbUser?.plan || 'free'
         session.user.isAdmin = dbUser?.isAdmin || false
       }
