@@ -19,6 +19,9 @@ export function Footer() {
           <Link href="/pricing" className="hover:text-foreground">
             Pricing
           </Link>
+          <Link href="/deck" className="hover:text-foreground">
+            Pitch Deck
+          </Link>
           <Link href="/terms" className="hover:text-foreground">
             Terms
           </Link>
